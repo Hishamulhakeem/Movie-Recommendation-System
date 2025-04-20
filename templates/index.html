@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Magic | Find Your Next Favorite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7566f9;
+            --primary-dark: #5e4ae6;
+            --background: #f8fafc;
+            --card: #ffffff;
+            --text: #334155;
+            --text-light: #64748b;
+            --accent: #f97316;
+            --accent-light: #fdba74;
+            --error: #ef4444;
+            --success: #22c55e;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1 .movie-icon {
+            margin-right: 12px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-top: 0;
+        }
+        
+        .search-card {
+            background-color: var(--card);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            margin-bottom: 2rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .movie-input-container {
+            position: relative;
+        }
+        
+        .movie-input-container input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        
+        .movie-input-container .movie-search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .number-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+        
+        .number-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            flex: 1;
+        }
+        
+        .number-btn {
+            flex: 1;
+            min-width: 40px;
+            height: 40px;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .number-btn:hover {
+            border-color: var(--primary-dark);
+            color: var(--primary-dark);
+        }
+        
+        .number-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .selected-value {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        button.find-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        button.find-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .recommendations-card {
+            background-color: var(--card);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: none;
+        }
+        
+        .recommendations-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .recommendations-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+        }
+        
+        .query-movie {
+            color: var(--primary);
+        }
+        
+        .recommendations-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .movie-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .rank {
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .movie-title {
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .movie-rating {
+            display: flex;
+            align-items: center;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        
+        .star-icon {
+            color: var(--accent);
+            margin-right: 0.25rem;
+        }
+        
+        .error-message {
+            background-color: #fecaca;
+            color: var(--error);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .loading-spinner {
+            display: none;
+            margin-left: 0.5rem;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .search-card, .recommendations-card {
+                padding: 1.5rem;
+            }
+            
+            .number-btn {
+                min-width: 36px;
+                height: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="movie-icon">🎬</span> Movie Magic Finder</h1>
+            <p class="subtitle">Discover movies similar to your favorites</p>
+        </div>
+        
+        <div class="search-card">
+            <form id="recommendForm">
+                <div class="input-group">
+                    <label for="movieTitle">Movie Title</label>
+                    <div class="movie-input-container">
+                        <span class="movie-search-icon">🔍</span>
+                        <input type="text" id="movieTitle" name="movie_title" placeholder="Enter a movie title (e.g. The Godfather)" required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="numRecommendations">Number of Recommendations</label>
+                    <div class="number-selector">
+                        <div class="number-btn-group">
+                            <div class="number-btn" data-value="2">2</div>
+                            <div class="number-btn" data-value="3">3</div>
+                            <div class="number-btn active" data-value="5">5</div>
+                            <div class="number-btn" data-value="10">10</div>
+                        </div>
+                        <div class="selected-value" id="selectedValue">5</div>
+                    </div>
+                    <input type="hidden" id="numRecommendations" name="num_recommendations" value="5">
+                </div>
+                
+                <button type="submit" class="find-btn" id="recommendButton">
+                    <span>Find Recommendations</span>
+                    <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke-opacity="0.25" stroke-dasharray="30" stroke-dashoffset="0"></circle>
+                        <circle cx="12" cy="12" r="10" stroke-opacity="1" stroke-dasharray="30" stroke-dashoffset="20"></circle>
+                    </svg>
+                </button>
+                
+                <div class="error-message" id="errorMessage"></div>
+            </form>
+        </div>
+        
+        <div class="recommendations-card" id="recommendationsCard">
+            <div class="recommendations-header">
+                <h2 class="recommendations-title">Top Recommendations</h2>
+            </div>
+            
+            <ul class="recommendations-list" id="recommendationsList">
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        const numberBtns = document.querySelectorAll('.number-btn');
+        const selectedValue = document.getElementById('selectedValue');
+        const numRecommendationsInput = document.getElementById('numRecommendations');
+        
+        numberBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                numberBtns.forEach(b => b.classList.remove('active'));
+                
+                btn.classList.add('active');
+                
+                const value = btn.getAttribute('data-value');
+                selectedValue.textContent = value;
+                numRecommendationsInput.value = value;
+            });
+        });
+        const recommendForm = document.getElementById('recommendForm');
+        const recommendButton = document.getElementById('recommendButton');
+        const loadingSpinner = document.querySelector('.loading-spinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const recommendationsCard = document.getElementById('recommendationsCard');
+        const recommendationsList = document.getElementById('recommendationsList');
+        
+        recommendForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            recommendButton.disabled = true;
+            loadingSpinner.style.display = 'block';
+            errorMessage.style.display = 'none';
+            recommendationsCard.style.display = 'none';
+            
+            const formData = new FormData(recommendForm);
+            
+            try {
+                const response = await fetch('/recommend', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    errorMessage.textContent = data.error;
+                    errorMessage.style.display = 'block';
+                    recommendationsCard.style.display = 'none';
+                } else {
+                    recommendationsList.innerHTML = '';
+                    
+                    data.recommendations.forEach((movie, index) => {
+                        const li = document.createElement('li');
+                        li.className = 'recommendation-item';
+                        li.innerHTML = `
+                            <div class="movie-info">
+                                <div class="rank">${index + 1}</div>
+                                <span class="movie-title">${movie.title}</span>
+                            </div>
+                            <span class="movie-rating">
+                                <span class="star-icon">⭐</span>
+                                ${movie.rating.toFixed(1)}
+                            </span>
+                        `;
+                        recommendationsList.appendChild(li);
+                    });
+                    
+                    recommendationsCard.style.display = 'block';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'An error occurred. Please try again.';
+                errorMessage.style.display = 'block';
+            } finally {
+                recommendButton.disabled = false;
+                loadingSpinner.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

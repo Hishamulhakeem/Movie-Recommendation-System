@@ -1,6 +1,6 @@
 import pandas as pd
 
-data = './data/new/data.csv'
+data = './data/data.csv'
 
 df = pd.read_csv(data)
 df = df.drop(columns = 'id')

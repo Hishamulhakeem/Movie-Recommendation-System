@@ -2,7 +2,8 @@
 
 **Movie Magic Finder** is a smart and interactive movie recommendation system that helps you discover films similar to the ones you already love. Whether you're a movie buff or just looking for your next watch, this app gives you high-quality suggestions backed by intelligent filtering techniques.
 
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/e474b76f-df78-472f-ae0c-db1cac7718e1)
+
 
 
 ---

@@ -4,7 +4,7 @@ from model import recommend_movies
 
 app = Flask(__name__)
 
-data = './data/new/data.csv'
+data = './data/data.csv'
 df = pd.read_csv(data)
 
 @app.route('/')
